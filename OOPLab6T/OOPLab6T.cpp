@@ -4,6 +4,58 @@
 
 using namespace std;
 
+//#include <iostream>
+
+class Base {
+protected:
+    int baseData;
+public:
+    Base(int data) : baseData(data) {}
+    virtual ~Base() = default;
+};
+
+class D1 : virtual public Base {
+protected:
+    int d1Data;
+public:
+    D1(int baseData, int data) : Base(baseData), d1Data(data) {}
+};
+
+class D2 : virtual public Base {
+protected:
+    int d2Data;
+public:
+    D2(int baseData, int data) : Base(baseData), d2Data(data) {}
+};
+
+class D3 : public D1 {
+protected:
+    int d3Data;
+public:
+    D3(int baseData, int d1Data, int data) : Base(baseData), D1(baseData, d1Data), d3Data(data) {}
+};
+
+class D4 : public D1 {
+protected:
+    int d4Data;
+public:
+    D4(int baseData, int d1Data, int data) : Base(baseData), D1(baseData, d1Data), d4Data(data) {}
+};
+
+class D5 : public D2 {
+protected:
+    int d5Data;
+public:
+    D5(int baseData, int d2Data, int data) : Base(baseData), D2(baseData, d2Data), d5Data(data) {}
+};
+
+class D6 : public D5, public D4, public D3 {
+protected:
+    int d6Data;
+public:
+    D6(int baseData, int d2Data, int d1Data, int d3Data, int d4Data, int data)
+        : Base(baseData), D5(baseData, d2Data, d2Data), D4(baseData, d1Data, d4Data), D3(baseData, d1Data, d3Data), d6Data(data) {}
+};
 
 
 //завдання 2
@@ -113,6 +165,16 @@ public:
     }
 };
 
+void Task1(){
+    D6 obj(1, 2, 3, 4, 5, 6);
+    std::cout << "Size of Base: " << sizeof(Base) << std::endl;
+    std::cout << "Size of D1: " << sizeof(D1) << std::endl;
+    std::cout << "Size of D2: " << sizeof(D2) << std::endl;
+    std::cout << "Size of D3: " << sizeof(D3) << std::endl;
+    std::cout << "Size of D4: " << sizeof(D4) << std::endl;
+    std::cout << "Size of D5: " << sizeof(D5) << std::endl;
+    std::cout << "Size of D6: " << sizeof(D6) << std::endl;
+}
 
 void Task2(){
     double a0, constant;
@@ -140,6 +202,21 @@ void Task2(){
 
     std::cout << "Sum of arithmetic progression: " << ap->sum(n) << std::endl;//ap це вказівник
     std::cout << "Sum of geometric progression: " << gp->sum(n) << std::endl;
+
+    // Визначення масиву вказівників на абстрактний клас
+    Progression* progressionArray[2];
+    progressionArray[0] = new ArithmeticProgression(1.0, 2.0); // а0 = 1, d = 2
+    progressionArray[1] = new GeometricProgression(1.0, 2.0); // а0 = 1, r = 2
+
+    // Вивід сум для об'єктів, що вказуються в масиві
+    for (int i = 0; i < 2; ++i) {
+        std::cout << "Sum of progression " << i + 1 << ": " << progressionArray[i]->sum(n) << std::endl;
+    }
+
+    // Звільнення пам'яті для об'єктів, що вказуються в масиві
+    for (int i = 0; i < 2; ++i) {
+        delete progressionArray[i];
+    }
 
     delete ap;
     delete gp;
@@ -174,6 +251,9 @@ int main() {
     cin >> choice;
 
     switch (choice) {
+    case 1:
+        Task1();
+        break;
     case 2:
         Task2();
         break;
