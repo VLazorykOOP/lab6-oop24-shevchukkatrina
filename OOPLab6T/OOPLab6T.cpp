@@ -4,59 +4,118 @@
 
 using namespace std;
 
-//#include <iostream>
+//завдання 1/1
 
 class Base {
 protected:
     int baseData;
 public:
-    Base(int data) : baseData(data) {}
-    virtual ~Base() = default;
+    Base() : baseData(0) {}
+    Base(int d) : baseData(d) {}
 };
 
-class D1 : virtual public Base {
+class D1 : protected Base {
 protected:
     int d1Data;
 public:
-    D1(int baseData, int data) : Base(baseData), d1Data(data) {}
+    D1() : d1Data(0) {}
+    D1(int d, int d1) : Base(d), d1Data(d1) {}
 };
 
-class D2 : virtual public Base {
+class D2 : protected Base {
 protected:
     int d2Data;
 public:
-    D2(int baseData, int data) : Base(baseData), d2Data(data) {}
+    D2() : d2Data(0) {}
+    D2(int d, int d1) : Base(d), d2Data(d1) {}
 };
 
-class D3 : public D1 {
+class D3 : protected D1 {
 protected:
     int d3Data;
 public:
-    D3(int baseData, int d1Data, int data) : Base(baseData), D1(baseData, d1Data), d3Data(data) {}
+    D3() : d3Data(0) {}
+    D3(int d, int d1, int d2) : D1(d, d1), d3Data(d2) {}
 };
 
-class D4 : public D1 {
+class D4 : protected D1 {
 protected:
     int d4Data;
 public:
-    D4(int baseData, int d1Data, int data) : Base(baseData), D1(baseData, d1Data), d4Data(data) {}
+    D4() : d4Data(0) {}
+    D4(int d, int d1, int d2) : D1(d, d1), d4Data(d2) {}
 };
 
-class D5 : public D2 {
+class D5 : protected Base, protected D2 {
 protected:
     int d5Data;
 public:
-    D5(int baseData, int d2Data, int data) : Base(baseData), D2(baseData, d2Data), d5Data(data) {}
+    D5() : d5Data(0) {}
+    D5(int d, int d1, int d2, int d3)
+        : Base(d), D2(d1, d2), d5Data(d3) {}
 };
 
-class D6 : public D5, public D4, public D3 {
+class D6 : protected D5, protected D4, protected D3 {
 protected:
     int d6Data;
 public:
-    D6(int baseData, int d2Data, int d1Data, int d3Data, int d4Data, int data)
-        : Base(baseData), D5(baseData, d2Data, d2Data), D4(baseData, d1Data, d4Data), D3(baseData, d1Data, d3Data), d6Data(data) {}
+    D6() : d6Data(0) {}
+    D6(int d4, int d5, int d6, int d7, int d8, int d9, int d10, int d11, int d12, int d13, int d14)
+        : D3(d4, d5, d6), D4(d7, d8, d9), D5(d10, d11, d12, d13), d6Data(d14) {}
 };
 
+
+//завдання 1/2
+
+class D1V : virtual protected Base {
+protected:
+    int d1Data;
+public:
+    D1V() : d1Data(0) {}
+    D1V(int d, int d1) : Base(d), d1Data(d1) {}
+};
+
+class D2V :virtual protected Base {
+protected:
+    int d2Data;
+public:
+    D2V() : d2Data(0) {}
+    D2V(int d, int d1) : Base(d), d2Data(d1) {}
+};
+
+class D3V :virtual protected D1V {
+protected:
+    int d3Data;
+public:
+    D3V() : d3Data(0) {}
+    D3V(int d, int d1, int d2) : D1V(d, d1), d3Data(d2) {}
+};
+
+class D4V :virtual protected D1V {
+protected:
+    int d4Data;
+public:
+    D4V() : d4Data(0) {}
+    D4V(int d, int d1, int d2) : D1V(d, d1), d4Data(d2) {}
+};
+
+class D5V :virtual protected Base, virtual protected D2V {
+protected:
+    int d5Data;
+public:
+    D5V() : d5Data(0) {}
+    D5V(int d, int d1, int d2, int d3)
+        : Base(d), D2V(d1, d2), d5Data(d3) {}
+};
+
+class D6V :virtual protected D5V, virtual protected D4V, virtual protected D3V {
+protected:
+    int d6Data;
+public:
+    D6V() : d6Data(0) {}
+    D6V(int d4, int d5, int d6, int d7, int d8, int d9, int d10, int d11, int d12, int d13, int d14)
+        : D3V(d4, d5, d6), D4V(d7, d8, d9), D5V(d10, d11, d12, d13), d6Data(d14) {}
+};
 
 //завдання 2
 
@@ -165,8 +224,8 @@ public:
     }
 };
 
-void Task1(){
-    D6 obj(1, 2, 3, 4, 5, 6);
+void Task1() {
+    std::cout << "Sizes of classes without virtual inheritance:" << std::endl;
     std::cout << "Size of Base: " << sizeof(Base) << std::endl;
     std::cout << "Size of D1: " << sizeof(D1) << std::endl;
     std::cout << "Size of D2: " << sizeof(D2) << std::endl;
@@ -174,6 +233,17 @@ void Task1(){
     std::cout << "Size of D4: " << sizeof(D4) << std::endl;
     std::cout << "Size of D5: " << sizeof(D5) << std::endl;
     std::cout << "Size of D6: " << sizeof(D6) << std::endl;
+
+    std::cout << std::endl;
+
+    std::cout << "Sizes of classes with virtual inheritance:" << std::endl;
+    std::cout << "Size of Base: " << sizeof(Base) << std::endl;
+    std::cout << "Size of D1V: " << sizeof(D1V) << std::endl;
+    std::cout << "Size of D2V: " << sizeof(D2V) << std::endl;
+    std::cout << "Size of D3V: " << sizeof(D3V) << std::endl;
+    std::cout << "Size of D4V: " << sizeof(D4V) << std::endl;
+    std::cout << "Size of D5V: " << sizeof(D5V) << std::endl;
+    std::cout << "Size of D6V: " << sizeof(D6V) << std::endl;
 }
 
 void Task2(){
