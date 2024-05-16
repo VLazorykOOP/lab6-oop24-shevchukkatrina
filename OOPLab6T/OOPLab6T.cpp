@@ -10,16 +10,16 @@ class Base {
 protected:
     int baseData;
 public:
-    Base() : baseData(0) {}
-    Base(int d) : baseData(d) {}
+    Base() : baseData(0) {}//Конструктор за замовчуванням, який ініціалізує baseData значенням 0.
+    Base(int d) : baseData(d) {}//Параметризований конструктор, який ініціалізує baseData значенням d
 };
 
 class D1 : protected Base {
 protected:
     int d1Data;
 public:
-    D1() : d1Data(0) {}
-    D1(int d, int d1) : Base(d), d1Data(d1) {}
+    D1() : d1Data(0) {}//Конструктор за замовчуванням, який ініціалізує d1Data значенням 0
+    D1(int d, int d1) : Base(d), d1Data(d1) {}//Параметризований конструктор, який ініціалізує частину Base значенням d та d1Data значенням d1
 };
 
 class D2 : protected Base {
@@ -61,13 +61,13 @@ protected:
 public:
     D6() : d6Data(0) {}
     D6(int d4, int d5, int d6, int d7, int d8, int d9, int d10, int d11, int d12, int d13, int d14)
-        : D3(d4, d5, d6), D4(d7, d8, d9), D5(d10, d11, d12, d13), d6Data(d14) {}
+        : D3(d4, d5, d6), D4(d7, d8, d9), D5(d10, d11, d12, d13), d6Data(d14) {}// Параметризований конструктор, який ініціалізує D3 значеннями d4, d5 та d6, D4 значеннями d7, d8 та d9, D5 значеннями d10, d11, d12 та d13, і d6Data значенням d14
 };
 
 
 //завдання 1/2
 
-class D1V : virtual protected Base {
+class D1V : virtual protected Base {//Клас D1V: Успадковується від Base з використанням віртуального захищеного успадкування
 protected:
     int d1Data;
 public:
